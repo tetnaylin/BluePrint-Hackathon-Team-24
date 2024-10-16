@@ -9,3 +9,47 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Attendee {
+  zId String @id
+  email String @unique
+  name String
+  societies Society[]
+  discord String? @unique
+  arcMember Boolean
+  year Int
+  responses AttendanceResponse[]
+}
+
+model Society {
+  googleId String @id
+  email String @unique
+  name String
+  members Attendee[]
+  events Event[]
+}
+
+model Event {
+  id String @id
+  name String
+  image String?
+  description String?
+  startDateTime DateTime
+  endDateTime DateTime
+  societies Society[]
+  responses AttendanceResponse[]
+}
+
+model AttendanceResponse {
+  id          Int    @id @default(autoincrement())
+  attendee Attendee? @relation(fields: [attendeeId], references: [zId])
+  attendeeId String?
+
+  formResponse String?
+
+  event Event @relation(fields: [eventId], references: [id])
+  eventId String
+
+  @@unique([attendeeId, eventId], name: "unique_attendee_event")
+  @@unique([formResponse, eventId], name: "unique_form_response_event")
+}
