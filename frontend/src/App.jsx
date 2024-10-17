@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import './App.css'
-import SignUp from './components/sign-up/SignUp'
+import AttendeeSignUp from "./components/sign-up/AttendeeSignUp"
+import ManageEvent from "./pages/CreateEditEvent"
 
 function App() {
 
@@ -9,7 +10,8 @@ function App() {
       <Routes>
         {/* <Route path="/" element={<Landing />} /> */}
         {/* to change to "/sign-up" afterwards */}
-        <Route path="/" element={<SignUp />} />
+        <Route path="/" element={<AttendeeSignUp />} />
+        <Route path="/newevent" element={<ManageEvent/>} />
       </Routes>
     </BrowserRouter>
   )
