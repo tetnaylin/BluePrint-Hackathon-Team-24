@@ -6,13 +6,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import getSignUpTheme from './theme/getSignUpTheme';
+import Input from '@mui/material/Input';
+import { styled } from '@mui/material/styles';
 import ProfileImage from '../../assets/logo.png';
-import { Avatar } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -22,6 +21,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: 'auto',
+  background: "#313131",
   boxShadow:
     'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
   [theme.breakpoints.up('sm')]: {
@@ -39,45 +39,23 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(0),
   },
-  backgroundImage:
-    'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-  backgroundRepeat: 'no-repeat',
-  ...theme.applyStyles('dark', {
-    backgroundImage:
-      'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-  }),
 }));
 
 export default function SignUp() {
-  const [mode, setMode] = React.useState('dark');
-  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
-  const defaultTheme = createTheme({ palette: { mode } });
-  const SignUpTheme = createTheme(getSignUpTheme(mode));
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  // This code only runs on the client side, to determine the system color preference
-  React.useEffect(() => {
-    // Check if there is a preferred mode in localStorage
-    const savedMode = localStorage.getItem('themeMode');
-    if (savedMode) {
-      setMode(savedMode);
-    } else {
-      // If no preference is found, it uses system preference
-      const systemPrefersDark = window.matchMedia(
-        '(prefers-color-scheme: dark)',
-      ).matches;
-      setMode(systemPrefersDark ? 'dark' : 'light');
-    }
-  }, []);
+  const [zIdError, setzIdError] = React.useState(false);
+  const [zIdErrorMessage, setzIdErrorMessage] = React.useState('');
+  const [yearError, setYearError] = React.useState(false);
+  const [yearErrorMessage, setYearErrorMessage] = React.useState('');
 
   const validateInputs = () => {
     const email = document.getElementById('email');
-    const password = document.getElementById('password');
+    const zId = document.getElementById('zId');
     const name = document.getElementById('name');
+    const year = document.getElementById('year');
 
     let isValid = true;
 
@@ -90,15 +68,6 @@ export default function SignUp() {
       setEmailErrorMessage('');
     }
 
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
     if (!name.value || name.value.length < 1) {
       setNameError(true);
       setNameErrorMessage('Name is required.');
@@ -108,11 +77,20 @@ export default function SignUp() {
       setNameErrorMessage('');
     }
 
+    if (year.value < 0 || year.value > 20) {
+      setYearError(true);
+      setYearErrorMessage('Please a valid year of study.');
+      isValid = false;
+    } else {
+      setYearError(false);
+      setYearErrorMessage('');
+    }
+
     return isValid;
   };
 
   const handleSubmit = (event) => {
-    if (nameError || emailError || passwordError) {
+    if (nameError || emailError || zIdError || yearError) {
       event.preventDefault();
       return;
     }
@@ -121,124 +99,138 @@ export default function SignUp() {
       name: data.get('name'),
       lastName: data.get('lastName'),
       email: data.get('email'),
-      password: data.get('password'),
+      zId: data.get('zId'),
+      year: data.get('year')
     });
   };
 
+  const attendeezId = "z12345678";
+
   return (
-    <ThemeProvider theme={showCustomTheme ? SignUpTheme : defaultTheme}>
-      <CssBaseline enableColorScheme />
-      <SignUpContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <Avatar
-              alt="Profile Image"
-              src={ProfileImage}
-              sx={{ width: 150, height: 150 }}
-            />
-          </Box>
+      <><CssBaseline enableColorScheme /><SignUpContainer direction="column" justifyContent="space-between">
+      <Card variant="outlined">
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <Avatar
+            alt="Profile Image"
+            src={ProfileImage}
+            sx={{ width: 150, height: 150 }} />
+        </Box>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+        >
+          <FormControl>
+            <FormLabel
+              htmlFor="name"
+              sx={{ display: 'flex', alignSelf: 'flex-start', color: "primary.main"}}
+            >Full Name <Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
+            <Input
+              autoComplete="name"
+              name="name"
+              required
+              fullWidth
+              id="name"
+              placeholder="Supreme Potato"
+              error={nameError}
+              helperText={nameErrorMessage}
+              color={nameError ? 'red' : 'secondary'}
+              sx={{"&:before": { borderColor: "primary.main" }}} />
+          </FormControl>
+          <FormControl>
+            <FormLabel
+              htmlFor="email"
+              sx={{ display: 'flex', alignSelf: 'flex-start' }}
+            >Email <Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
+            <Input
+              required
+              fullWidth
+              id="email"
+              placeholder="potatoiskool@email.com"
+              name="email"
+              autoComplete="email"
+              error={emailError}
+              helperText={emailErrorMessage}
+              color={nameError ? 'red' : 'secondary'}
+              sx={{"&:before": { borderColor: "primary.main" }}}/>
+          </FormControl>
+          <FormControl disabled variant="standard">
+            <FormLabel
+              htmlFor="zId"
+              sx={{ display: 'flex', alignSelf: 'flex-start' }}
+            >zId</FormLabel>
+            <Input
+              required
+              fullWidth
+              name="zId"
+              placeholder={attendeezId}
+              type="zId"
+              id="zId"
+              variant="outlined"
+              color={'primary'} />
+          </FormControl>
+          <FormControl>
+            <FormLabel
+              htmlFor="name"
+              sx={{ display: 'flex', alignSelf: 'flex-start' }}
+            >Discord</FormLabel>
+            <Input
+              autoComplete="name"
+              name="name"
+              fullWidth
+              id="name"
+              placeholder="itz_potato"
+              color={nameError ? 'red' : 'secondary'}
+              sx={{"&:before": { borderColor: "primary.main" }}} />
+          </FormControl>
+          <FormControl>
+            <FormLabel
+              htmlFor="year"
+              sx={{ display: 'flex', alignSelf: 'flex-start' }}
+            >Year of Study</FormLabel>
+            <Input
+              autoComplete="year"
+              name="year"
+              fullWidth
+              id="year"
+              placeholder="1, 2, 3, ..."
+              error={yearError}
+              helperText={yearErrorMessage}
+              color={yearError ? 'red' : 'secondary'}
+              sx={{"&:before": { borderColor: "primary.main" }}} />
+          </FormControl>
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            pb='15%'
           >
-            <FormControl>
-              <FormLabel 
-                htmlFor="name"
-                sx={{ display: 'flex', alignSelf: 'flex-start' }}
-              >* Full name</FormLabel>
-              <TextField
-                autoComplete="name"
-                name="name"
-                required
-                fullWidth
-                id="name"
-                placeholder="Supreme Potato"
-                error={nameError}
-                helperText={nameErrorMessage}
-                color={nameError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel 
-                htmlFor="email"
-                sx={{ display: 'flex', alignSelf: 'flex-start' }}
-              >* Email</FormLabel>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                placeholder="potatoiskool@email.com"
-                name="email"
-                autoComplete="email"
-                variant="outlined"
-                error={emailError}
-                helperText={emailErrorMessage}
-                color={passwordError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel 
-                htmlFor="password"
-                sx={{ display: 'flex', alignSelf: 'flex-start' }}
-              >* zId</FormLabel>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                placeholder="z1234567"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                variant="outlined"
-                error={passwordError}
-                helperText={passwordErrorMessage}
-                color={passwordError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel 
-                htmlFor="name"
-                sx={{ display: 'flex', alignSelf: 'flex-start' }}
-              >Discord</FormLabel>
-              <TextField
-                autoComplete="name"
-                name="name"
-                fullWidth
-                id="name"
-                placeholder="itz_potato"
-                color={nameError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            <Box
-              alignItems="center"
-              pb= '15%'
-            >
-              <FormControlLabel 
-                control={<Checkbox value="allowExtraEmails" color="primary"/>}
-                label="Arc Member?"
-              />
-            </Box>
-            
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
-              <Button
-                type="submit"
-                variant="contained"
-                onClick={validateInputs}
-              >
-                Sign up
-              </Button>
-              <Button
-                type="cancel"
-                variant="contained"
-                onClick={validateInputs}
-              >
-                Cancel
-              </Button>
-            </Box>
+            <FormControlLabel
+              control={<Checkbox value="arcMember" color="secondary"/>}
+              label="Arc Member?"
+              sx={{ mr: 0.5, color: "primary.main" }}/><Typography sx={{ color: "secondary.main"}}>*</Typography>
           </Box>
-        </Card>
-      </SignUpContainer>
-    </ThemeProvider>
+
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={validateInputs}
+              color="secondary"
+            >
+              Sign up
+            </Button>
+            <Button
+              type="cancel"
+              variant="contained"
+              onClick={validateInputs}
+              color="primary"
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
+      </Card>
+    </SignUpContainer></>
   );
 }
