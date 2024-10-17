@@ -2,6 +2,11 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 dotenv.config();
 
+export interface UserInfoToken {
+    userId: string;
+    email: string;
+}
+
 // It's for the backend, so I think it's fine if we export this
 // Input: (zID: string, password: string)
 // Output: Boolean(promise) and console.errors
@@ -39,4 +44,35 @@ export async function authenticateStudent(zID: string, password: string): Promis
         return false;
     }
     return true;
+}
+export const authenticateAccessToken = (authHeader: string | undefined): UserInfoToken | undefined => {
+  
+    if (!authHeader) {
+      return undefined;
+    }
+    const token = authHeader.split(' ')[1];
+  
+    try {
+        const user: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
+        console.log(user)
+        return {userId: user.userId, email: user.email};
+    } catch (e) {
+        return undefined;
+    }
+
+  }
+
+export const authenticateRefreshToken = (refreshToken: string | undefined): UserInfoToken | undefined => {
+  
+    if (!refreshToken) {
+        return undefined;
+    }
+
+    try {
+        const user: any = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string);
+        console.log(user)
+        return {userId: user.userId, email: user.email};
+    } catch (e) {
+        return undefined;
+    }
 }

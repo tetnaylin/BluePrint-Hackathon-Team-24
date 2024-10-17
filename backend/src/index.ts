@@ -1,22 +1,31 @@
-import express, { Request, Response, RequestHandler } from 'express';
-import jwt from "jsonwebtoken";
-import { authenticateStudent } from './auth';
+import express, { Request, Response } from 'express';
+import { authenticateStudent, authenticateAccessToken, authenticateRefreshToken, UserInfoToken } from './auth';
 import { SERVER_PORT } from '../../config.json';
+import { getDb } from './config/db';
+import { testDb } from './config/testdb';
+import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-// import {testDb } from './config/testdb';
 
 const app = express();
+const db = getDb();
+
+app.use(express.json());
 dotenv.config();
 
-const authenticateAccessToken = (token: string) => {
-  let userId;
-  try {
-    userId = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string)
-  } catch(err) {
-    return undefined;
-  }
 
-  return userId
+const tokenGetUserInfo = async(zId: string) => {
+  const user = await db.attendee.findUnique({
+    where: {
+      zId: zId
+    },
+    select: {
+      email: true
+    }
+  });
+
+  if (user === null) return undefined;
+
+  return {userId: zId, email: user.email};
 }
 
 app.get('/', (req: Request, res: Response) => {
@@ -24,41 +33,63 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript with Express :)))!');
 });
 
-app.get('/login', (req: Request, res: Response) => {
-  const zID = req.query.zID as string;
-  const password = req.query.password as string;
+app.post('/zIdLogin', async(req: Request, res: Response) => {
+  const zId = req.body.zID;
+  const password = req.body.password;
   
-  if (!zID || !authenticateStudent(zID, password)){
-    res.status(401).send("INVALID LOGIN INPUT");
+  if (!zId || !authenticateStudent(zId, password)) {
+    res.status(401).send("INVALID LOGIN CREDENTIALS");
     return;
   }
 
-  const user = {userId: 123} // Replace with function to get user info
-  // I'll try to make it after rewatching the prisma vid
+  const userInfo = await tokenGetUserInfo(zId);
+  if (!userInfo) {
+    res.status(404).send("USER NOT FOUND");
+    return;
+  }
 
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, {algorithm: "HS256", expiresIn: "15m"});
-  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET as string, {algorithm: "HS256", expiresIn: "90d"})
+  const user = {
+    userId: zId,
+    email: userInfo.email
+  }
+
+  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, {algorithm: "HS256", expiresIn: "20s"});
+  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET as string, {algorithm: "HS256", expiresIn: "1d"})
   res.send({accessToken: accessToken, refreshToken: refreshToken});
 });
 
-// // Planning to repurpose this for testing. Will make one after I learn prisma
 
-// app.get('/validatejwt', (req: Request, res: Response) => {
-//   const authHeader = req.headers['authorization'];
-//   if (!authHeader) {
-//     res.status(401).send("INVALID TOKEN");
-//     return;
-//   }
-//   const token = authHeader.split(' ')[1];
-//   const userId = authenticateAccessToken(token);
-//   if (!userId)
+app.post('/getNewToken', (req: Request, res: Response) => {
+  const refreshToken = req.body.refreshToken;
 
-//   res.json("OK");
-// })
+  const user = authenticateRefreshToken(refreshToken);
+  if (!user) {
+    res.status(403).send("INVALID REFRESH TOKEN");
+    return;
+  }
+  const newAccessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, {algorithm: "HS256", expiresIn: "20s"});
+
+  res.json(newAccessToken);
+})
+
+
+//For testing tokens
+app.get('/checkValidToken', (req: Request, res: Response) => {
+  const user = authenticateAccessToken(req.headers['authorization']);
+  console.log(user);
+
+  if (!user) {
+    res.sendStatus(403);
+    return;
+  }
+
+  res.json("access granted :)");
+
+})
 
 app.listen(SERVER_PORT, () => {
   console.log(`Server running on port http://localhost:${SERVER_PORT}`);
 });
 
 
-// testDb();
+testDb();
