@@ -1,5 +1,7 @@
-
-async function authenticateStudent(zID: string, password: string): Promise<boolean> {
+// It's for the backend, so I tink it's fine if we export this
+// Input: (zID: string, password: string)
+// Output: Boolean(promise) and console.errors
+export async function authenticateStudent(zID: string, password: string): Promise<boolean> {
     if (process.env.NODE_ENV !== 'development') {
         if (/^[a-zA-Z0-9]+$/.test(zID) || !/^z[0-9]{7}$/.test(zID)) {
 
