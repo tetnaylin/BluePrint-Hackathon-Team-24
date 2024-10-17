@@ -1,4 +1,8 @@
-// It's for the backend, so I tink it's fine if we export this
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+dotenv.config();
+
+// It's for the backend, so I think it's fine if we export this
 // Input: (zID: string, password: string)
 // Output: Boolean(promise) and console.errors
 export async function authenticateStudent(zID: string, password: string): Promise<boolean> {
