@@ -12,7 +12,6 @@ import Input from '@mui/material/Input';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import ProfileImage from '../../assets/logo.png';
 import { Avatar, Typography } from '@mui/material';
-//import TopMenu from '../top-menu/TopMenu';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',

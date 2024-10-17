@@ -69,7 +69,6 @@ export default function ManageEvent() {
           variant="h1"
           sx={{ 
             padding:3,
-            fontSize: 60,
             fontStyle: 'italic'
           }}>
             Create Event
@@ -189,6 +188,18 @@ export default function ManageEvent() {
             )}
             filterSelectedOptions // Prevents showing already selected items in suggestions
           />
+
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            pb='15%'
+          >
+            <FormControlLabel
+              control={<Checkbox value="arcMember" color="secondary"/>}
+              label="Recurring Event?"
+              sx={{ mr: 0.5, color: "primary.main" }}/>
+          </Box>
 
           <Box sx={{ mt: 4, display: 'flex', flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
             <Button
