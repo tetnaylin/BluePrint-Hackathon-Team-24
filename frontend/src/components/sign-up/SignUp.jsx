@@ -124,7 +124,7 @@ export default function SignUp() {
             <FormLabel
               htmlFor="name"
               sx={{ display: 'flex', alignSelf: 'flex-start', color: "primary.main"}}
-            >Full name <Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
+            >Full Name <Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
             <Input
               autoComplete="name"
               name="name"

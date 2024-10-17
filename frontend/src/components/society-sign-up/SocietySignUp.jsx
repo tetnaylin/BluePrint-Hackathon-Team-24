@@ -1,17 +1,14 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
-import Input from '@mui/material/Input';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import ProfileImage from '../../assets/logo.png';
 import { Avatar, Typography } from '@mui/material';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -42,166 +39,49 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SocietySignUp() {
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [zIdError, setzIdError] = React.useState(false);
-  const [zIdErrorMessage, setzIdErrorMessage] = React.useState('');
-
-  const validateInputs = () => {
-    const email = document.getElementById('email');
-    const zId = document.getElementById('zId');
-    const name = document.getElementById('name');
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
-    }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage('Name is required.');
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage('');
-    }
-
-    return isValid;
-  };
-
-  const handleSubmit = (event) => {
-    if (nameError || emailError || zIdError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      zId: data.get('zId'),
-    });
-  };
-
-  const attendeezId = "z12345678";
-
+  
   return (
       <><CssBaseline enableColorScheme /><SignUpContainer direction="column" justifyContent="space-between">
-      <Card variant="outlined">
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-          <Avatar
-            alt="Profile Image"
-            src={ProfileImage}
-            sx={{ width: 150, height: 150 }} />
-        </Box>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-        >
-          <FormControl>
-            <FormLabel
-              htmlFor="name"
-              sx={{ display: 'flex', alignSelf: 'flex-start', color: "primary.main"}}
-            >Full name <Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
-            <Input
-              autoComplete="name"
-              name="name"
-              required
-              fullWidth
-              id="name"
-              placeholder="Supreme Potato"
-              error={nameError}
-              helperText={nameErrorMessage}
-              color={nameError ? 'red' : 'secondary'}
-              sx={{"&:before": { borderColor: "primary.main" }}} />
-          </FormControl>
-          <FormControl>
-            <FormLabel
-              htmlFor="email"
-              sx={{ display: 'flex', alignSelf: 'flex-start' }}
-            >Email <Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
-            <Input
-              required
-              fullWidth
-              id="email"
-              placeholder="potatoiskool@email.com"
-              name="email"
-              autoComplete="email"
-              error={emailError}
-              helperText={emailErrorMessage}
-              color={nameError ? 'red' : 'secondary'}
-              sx={{"&:before": { borderColor: "primary.main" }}}/>
-          </FormControl>
-          <FormControl disabled variant="standard">
+      <GoogleOAuthProvider clientId="<your_client_id>">
+        <Card variant="outlined">
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Avatar
+              alt="Profile Image"
+              src={ProfileImage}
+              sx={{ width: 150, height: 150 }} />
+          </Box>
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2rem)' }}
+          >
+            GREETINGS SOCIETY
+          </Typography>
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{ width: '100%', fontSize: 'clamp(0.7rem, 2.7vw, 0.7rem)' }}
+          >
+            If you're an attendee, you're in the wrong place :(
+          </Typography>
+          <Box
+            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+          >
             <FormLabel
               htmlFor="zId"
               sx={{ display: 'flex', alignSelf: 'flex-start' }}
-            >zId</FormLabel>
-            <Input
-              required
-              fullWidth
-              name="zId"
-              placeholder={attendeezId}
-              type="zId"
-              id="zId"
-              variant="outlined"
-              color={'primary'} />
-          </FormControl>
-          <FormControl>
-            <FormLabel
-              htmlFor="name"
-              sx={{ display: 'flex', alignSelf: 'flex-start' }}
-            >Discord</FormLabel>
-            <Input
-              autoComplete="name"
-              name="name"
-              fullWidth
-              id="name"
-              placeholder="itz_potato"
-              color={nameError ? 'red' : 'secondary'}
-              sx={{"&:before": { borderColor: "primary.main" }}} />
-          </FormControl>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            pb='15%'
-          >
-            <FormControlLabel
-              control={<Checkbox value="arcMember" color="secondary"/>}
-              label="Arc Member?"
-              sx={{ mr: 0.5, color: "primary.main" }}/><Typography sx={{ color: "secondary.main"}}>*</Typography>
+            >Please Log In<Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
+            <GoogleLogin
+              onSuccess={credentialResponse => {
+                console.log(credentialResponse);
+              }}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+            />
           </Box>
-
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={validateInputs}
-              color="secondary"
-            >
-              Sign up
-            </Button>
-            <Button
-              type="cancel"
-              variant="contained"
-              onClick={validateInputs}
-              color="primary"
-            >
-              Cancel
-            </Button>
-          </Box>
-        </Box>
-      </Card>
+        </Card>
+      </GoogleOAuthProvider>
     </SignUpContainer></>
   );
 }

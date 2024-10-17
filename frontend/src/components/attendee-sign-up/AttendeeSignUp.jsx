@@ -1,9 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
@@ -11,7 +9,9 @@ import MuiCard from '@mui/material/Card';
 import Input from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
 import ProfileImage from '../../assets/logo.png';
-import { Avatar, Typography } from '@mui/material';
+import { Avatar, IconButton, InputAdornment, Typography } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -44,24 +44,58 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 export default function AttendeeSignUp() {
     const [zIdError, setzIdError] = React.useState(false);
     const [zIdErrorMessage, setzIdErrorMessage] = React.useState('');
+    const [passwordError, setPasswordError] = React.useState(false);
+    const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
 
   const validateInputs = () => {
     const zId = document.getElementById('zId');
+    const password = document.getElementById('password');
 
     let isValid = true;
+
+    if (!password.value || password.value.length < 6) {
+      setPasswordError(true);
+      setPasswordErrorMessage('Password must be at least 6 characters long.');
+      isValid = false;
+    } else {
+      setPasswordError(false);
+      setPasswordErrorMessage('');
+    }
+
+    if (!zId.value || !/^z\d{7}$/.test(zId.value)) {
+      setzIdError(true);
+      setzIdErrorMessage('Password must start with "z" followed by 7 digits.');
+      isValid = false;
+    } else {
+      setzIdError(false);
+      setzIdErrorMessage('');
+    }
 
     return isValid;
   };
 
   const handleSubmit = (event) => {
-    if ( zIdError ) {
+    if ( zIdError || passwordError ) {
       event.preventDefault();
       return;
     }
     const data = new FormData(event.currentTarget);
     console.log({
       zId: data.get('zId'),
+      password: data.get('password'),
     });
+  };
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (event) => {
+    event.preventDefault();
   };
 
   return (
@@ -73,6 +107,20 @@ export default function AttendeeSignUp() {
             src={ProfileImage}
             sx={{ width: 150, height: 150 }} />
         </Box>
+        <Typography
+          component="h1"
+          variant="h4"
+          sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2rem)' }}
+        >
+          GREETINGS ATTENDEE
+        </Typography>
+        <Typography
+          component="h1"
+          variant="h4"
+          sx={{ width: '100%', fontSize: 'clamp(0.7rem, 2.7vw, 0.7rem)' }}
+        >
+          If you're managing a society, you're in the wrong place :(
+        </Typography>
         <Box
           component="form"
           onSubmit={handleSubmit}
@@ -97,23 +145,47 @@ export default function AttendeeSignUp() {
               color={zIdError ? 'red' : 'secondary'}
               sx={{"&:before": { borderColor: "primary.main" }}} />
           </FormControl>
+          <FormControl>
+            <FormLabel
+              htmlFor="password"
+              sx={{ display: 'flex', alignSelf: 'flex-start' }}
+            >Your Password<Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
+            <Input
+              autoComplete='password'
+              password='password'
+              required
+              fullWidth
+              name="password"
+              placeholder="Password must be at least 6 characters"
+              type={showPassword ? 'text' : 'password'}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              error={passwordError}
+              helperText={passwordErrorMessage}
+              id="password"
+              color={passwordError ? 'red' : 'secondary'}
+              sx={{"&:before": { borderColor: "primary.main" }}} />
+          </FormControl>
           <Box pb='15%'/>
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 10, justifyContent: 'center' }}>
+          <Box sx={{ justifyContent: 'center' }}>
             <Button
               type="submit"
               variant="contained"
               onClick={validateInputs}
               color="secondary"
             >
-              Sign up
-            </Button>
-            <Button
-              type="cancel"
-              variant="contained"
-              onClick={validateInputs}
-              color="primary"
-            >
-              Cancel
+              LOG IN
             </Button>
           </Box>
         </Box>
