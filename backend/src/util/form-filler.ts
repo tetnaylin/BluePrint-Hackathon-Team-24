@@ -204,25 +204,3 @@ const scrapeGoogleForm = async (url: string) => {
 //  console.log(`time taken: ${endTime - startTime}`);
   return formData;
 };
-
-// URL of the Google Form
-const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSckD-2EGxLWikH7tpl19tsj9xzW6O2aaYWdhB_VUNkfoedixQ/viewform'; // Replace with your form URL
-
-const pokeUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfup_Gv7QW13HMqn8aTD6rhYopSs7Dq8XjcZI3dzW0VS0KKUQ/viewform';
-const attendee = {
-                  zId: "z12345678",
-                  email: "hello@gmail.com",
-                  name: "bruce wayne",
-                  discord: "batman",
-                  arcMember: true,
-                  year: 4
-                }
-
-// Call the function and log the result
-submitForm(formUrl, attendee)
-  .then(data => {
-    console.log('Form Data:', data);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
