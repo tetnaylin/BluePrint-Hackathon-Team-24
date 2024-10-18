@@ -99,19 +99,33 @@ export default function AttendeeSignUp() {
     return isValid;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (nameError || emailError || zIdError || yearError) {
-      event.preventDefault();
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      zId: data.get('zId'),
-      year: data.get('year')
+    const signUpData = {
+                        name: data.get('name'),
+                        email: data.get('email'),
+                        zId: attendeezId,
+                        year: data.get('year'),
+                        discord: data.get('discord'),
+                        arcMember: data.get('arcMember') !== null
+                      };
+    const response = await fetch('http://localhost:5180/signUp/attendee', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(signUpData)
     });
+
+    const {accessToken, refreshToken} = await response.json();
+    localStorage.setItem(`present-refresh`, refreshToken);
+    localStorage.setItem(`present-access`, accessToken);
+    navigate("/events")
   };
 
   return (
@@ -185,10 +199,10 @@ export default function AttendeeSignUp() {
             >Discord</FormLabel>
             <Input
               autoComplete="name"
-              name="name"
+              name="discord"
               fullWidth
-              id="name"
-              placeholder="itz_potato"
+              id="discord"
+              placeholder="Your Discord Username"
               color={nameError ? 'red' : 'secondary'}
               sx={{"&:before": { borderColor: "primary.main" }}} />
           </FormControl>
@@ -215,7 +229,7 @@ export default function AttendeeSignUp() {
             pb='15%'
           >
             <FormControlLabel
-              control={<Checkbox value="arcMember" color="secondary"/>}
+              control={<Checkbox name="arcMember" value="true" color="secondary"/>}
               label="Arc Member?"
               sx={{ mr: 0.5, color: "primary.main" }}/><Typography sx={{ color: "secondary.main"}}>*</Typography>
           </Box>
@@ -232,7 +246,7 @@ export default function AttendeeSignUp() {
             <Button
               type="cancel"
               variant="contained"
-              onClick={validateInputs}
+              onClick={()=>navigate("/")}
               color="primary"
             >
               Cancel

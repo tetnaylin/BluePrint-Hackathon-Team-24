@@ -15,12 +15,15 @@ import { testDb } from './config/testdb';
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Society, updateSociety, createSociety } from './config/society';
-import { Attendee, createAttendeeProfile } from './config/attendee';
+import { Attendee, createAttendeeProfile, getAttendeeFromID } from './config/attendee';
 import errorHandler from 'middleware-http-errors';
 
+import cors from 'cors';
+import { submitForm } from './util/form-filler';
 const app = express();
 const db = getDb();
 
+app.use(cors());
 app.use(express.json());
 dotenv.config();
 
@@ -30,10 +33,11 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/zIdLogin', async(req: Request, res: Response) => {
+  console.log(req.body.zId);
   const zId = req.body.zId;
   const password = req.body.password;
   
-  if (!zId || !authenticateStudent(zId, password)) {
+  if (!zId || !await authenticateStudent(zId, password)) {
     res.status(401).send("INVALID LOGIN CREDENTIALS");
     return;
   }
@@ -103,6 +107,7 @@ app.post('/getNewToken', authenticateRefreshToken2, async(req: Request, res: Res
   }
   
   const newAccessToken = generateAccessToken(newPayload);
+  console.log(`new token: ${newAccessToken}`);
 
   res.json({accessToken: newAccessToken});
 })
@@ -140,15 +145,14 @@ app.post('/logout', authenticateRefreshToken2, async(req: Request, res: Response
 })
 
 app.post('/signUp/attendee', async(req: Request, res: Response) => {
-  const { zId, name, email, discord, arcMember } = req.body;
-  const year = JSON.parse(req.body.year);
+  const { zId, name, email, discord, arcMember, year } = req.body;
   const payload: Attendee = {
     zId: zId,
     name: name,
     email: email,
     discord: discord,
     arcMember: arcMember,
-    year: year
+    year: parseInt(year)
   }
 
   await createAttendeeProfile(payload);
@@ -211,6 +215,31 @@ app.get('/event/all', authenticateAccessToken2, async(req: Request, res: Respons
   const allEvents = await db.event.findMany();
   res.json({data: allEvents});
 })
+
+app.post('/autosubmit', authenticateAccessToken2, async(req: Request, res: Response) => {
+  const user = res.locals.user;
+  const { formUrl } = req.body;
+  if (!user) {
+    res.sendStatus(403);
+  }
+
+  if (!user?.society) {
+    const userDetails = await getAttendeeFromID(user.userId);
+
+    if(!userDetails) {
+      res.json(false);
+      return;
+    }
+
+    const response = await submitForm(formUrl, userDetails);
+
+    res.json(response);
+    return;
+  }
+
+    res.json(false);
+    return;
+});
 
 app.listen(SERVER_PORT, () => {
   console.log(`Server running on port http://localhost:${SERVER_PORT}`);

@@ -11,15 +11,33 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import { useNavigate } from 'react-router-dom';
 
 export default function AccountMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const navigate = useNavigate();
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
       setAnchorEl(null);
+    };
+
+    const handleLogOut = async () => {
+      const refreshToken = localStorage.getItem(`present-refresh`);
+      await fetch('http://localhost:5180/logout', {
+        method: 'POST',
+        headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(refreshToken)
+      });
+
+      localStorage.removeItem(`present-refresh`);
+      localStorage.removeItem(`present-access`);
+      navigate("/");
     };
     return (
           <><Tooltip title="Account settings">
@@ -74,7 +92,7 @@ export default function AccountMenu() {
            Edit Profile
           </MenuItem>
           <Divider />
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={handleLogOut}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

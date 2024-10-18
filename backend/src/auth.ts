@@ -117,7 +117,8 @@ export const authenticateAccessToken2 = (req: Request, res: Response, next: Next
 
     jwt.verify(token as string, process.env.ACCESS_TOKEN_SECRET as string, (err: any, user: any) => {
         if (err) {
-            res.send(401).send("Invalid Token");
+            console.error('Access Token Verification Error:', err);
+            return res.sendStatus(401).send("Invalid Token");
         }
 
         res.locals.user = user;

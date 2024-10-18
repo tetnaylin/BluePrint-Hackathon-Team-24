@@ -47,6 +47,27 @@ export const createAttendeeProfile = async (newAttendee: Attendee) => {
     return upsertedAttendee;
 };
 
+export const getAttendeeFromID = async(zId: string): Promise<Attendee | null> => {
+    const data = await db.attendee.findUnique( {
+        where: {
+            zId: zId
+        }
+    });
+
+    if(!data) {
+        return null;
+    }
+
+    return {
+        zId: data?.zId,
+        name: data?.name,
+        email: data?.email,
+        discord: data?.discord ?? "",
+        arcMember: data?.arcMember,
+        year: Number(data?.year)
+    };
+}
+
 export const joinSociety = async(attendee: Attendee, society: Society) => {
     const updatedAttendee = await db.attendee.update( {
         where: {

@@ -20,6 +20,7 @@
     "DatePicker": "^2.0.0",
     "dayjs": "^1.11.13",
     "google-auth-library": "^9.14.2",
+    "jwt-decode": "^4.0.0",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-dropzone": "^14.2.9",

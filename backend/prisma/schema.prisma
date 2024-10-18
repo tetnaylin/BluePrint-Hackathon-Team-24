@@ -17,7 +17,7 @@ model Attendee {
   societies Society[]
   discord String?
   arcMember Boolean
-  year Int
+  year Int?
   responses AttendanceResponse[]
 }
 

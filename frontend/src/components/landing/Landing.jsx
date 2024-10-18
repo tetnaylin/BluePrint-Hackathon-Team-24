@@ -5,10 +5,27 @@ import ProfileImage from '../../assets/logo.png';
 import { Avatar, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AnimatedBackground from "../animated-background/AnimatedBackground"
+import checkLoggedIn from '../../util/verifyUser';
 
 export default function Landing() {
   const navigate = useNavigate();
-  
+  const [signedIn, setSignedIn] = React.useState(false);
+
+  React.useEffect(() => {
+      const loginCheck = async () => {
+          const signed_in = await checkLoggedIn();
+          setSignedIn(signed_in);
+      } 
+      loginCheck();
+  }, []);
+
+  React.useEffect(() => {
+    console.log(signedIn);
+    if(signedIn) {
+      navigate("/events");
+    }
+  }, [signedIn]);
+
   return (
       <><CssBaseline enableColorScheme />
       <AnimatedBackground/>

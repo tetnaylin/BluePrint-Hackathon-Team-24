@@ -11,6 +11,8 @@ import EventPage from "./pages/EventPage"
 import ViewAllOrUpcomingEvents from "./pages/ViewAllOrUpcomingEvents"
 import ViewCurrentEvents from "./pages/ViewCurrentEvents"
 import NewSocietySignUp from "./components/new-society-sign-up/NewSocietySignUp"
+import Autosubmit from "./pages/autosubmit"
+
 
 function App() {
 
@@ -24,12 +26,14 @@ function App() {
         <Route path="/new-society-sign-up" element={<NewSocietySignUp />} />
         {/* <Route path="/" element={<Landing />} /> */}
         {/* to change to "/sign-up" afterwards */}
-        <Route path="/scanned" element={<QrCodeScanned />} />
+        <Route path="/option" element={<QrCodeScanned />} />
         <Route path="/newevent" element={<ManageEvent/>} />
         <Route path="/submitted" element={<FormSubmitted />} />
         <Route path="/eventname" element={<EventPage/>} />
         <Route path="/all-events" element={<ViewAllOrUpcomingEvents/>} />
         <Route path="/events" element={<ViewCurrentEvents/>} />
+        <Route path="/submit/:formId" element={<Autosubmit/>} />
+        <Route path="/forms/d/e/:formId/viewform?" element={<Autosubmit/>} />
       </Routes>
     </BrowserRouter>
   )
