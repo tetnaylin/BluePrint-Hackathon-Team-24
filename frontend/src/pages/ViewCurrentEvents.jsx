@@ -5,12 +5,14 @@ import TopMenu from "../components/top-menu/TopMenu";
 import { Typography } from "@mui/material";
 import ActionAreaCard from "../components/event-card/EventCard";
 
-function ViewAllOrUpcomingEvents() {
-  document.body.className="background";
-  return (
+function ViewCurrentEvents( { signed_in } ) {
+
+    document.body.className="background";
+  
+    return (
     <div className="background">
-      <TopMenu/>
-      <EventsTabs/>
+      <TopMenu props={{ isSociety: true }}/>
+
       <Typography
         component="h1"
         variant="h4"
@@ -19,16 +21,19 @@ function ViewAllOrUpcomingEvents() {
           fontSize: 'clamp(2rem, 10vw, 2rem)', 
           pt: '5%', 
           textAlign: 'center',
-          color: 'secondary.main'
+          color: 'secondary.main',
+          fontStyle: 'italic',
+          mt: 3
         }}
       >
-        UPCOMING EVENTS
+      Currently Ongoing Events
       </Typography>
-      <ActionAreaCard props={{isSociety: true}}/>
+      {signed_in ? <EventsTabs props={{ isSociety: false}}/> : <></>}
+      <ActionAreaCard props={{ isSociety: false }}/>
       <ActionAreaCard/>
       
     </div>
   );
 }
   
-  export default ViewAllOrUpcomingEvents;
+  export default ViewCurrentEvents;
