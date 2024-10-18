@@ -42,7 +42,7 @@ export default function SocietySignUp() {
   
   return (
       <><CssBaseline enableColorScheme /><SignUpContainer direction="column" justifyContent="space-between">
-      <GoogleOAuthProvider clientId="<your_client_id>">
+      <GoogleOAuthProvider clientId="1081011989496-frvb0jond17e3s5qtr9inueked70b4re.apps.googleusercontent.com">
         <Card variant="outlined">
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
             <Avatar
@@ -72,7 +72,15 @@ export default function SocietySignUp() {
               sx={{ display: 'flex', alignSelf: 'flex-start' }}
             >Please Log In<Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
             <GoogleLogin
-              onSuccess={credentialResponse => {
+              onSuccess={async (credentialResponse) => {
+                const {accessToken, refreshToken} = await fetch('http://localhost:5180/oauth', {
+                  method: 'POST',
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({OAuthToken: credentialResponse.credential}),
+                })
                 console.log(credentialResponse);
               }}
               onError={() => {

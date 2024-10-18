@@ -1,10 +1,11 @@
 import express, { Request, Response } from 'express';
-import { authenticateStudent, authenticateAccessToken, authenticateRefreshToken, UserInfoToken, generateAccessToken, generateRefreshToken, tokenGetUserInfo } from './auth';
+import { authenticateStudent, authenticateAccessToken, authenticateRefreshToken, UserInfoToken, generateAccessToken, generateRefreshToken, tokenGetUserInfo, OAuthToken, UserRefreshToken } from './auth';
 import { SERVER_PORT } from '../../config.json';
 import { getDb } from './config/db';
 import { testDb } from './config/testdb';
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { Society, upsertSociety } from './config/society';
 
 const app = express();
 const db = getDb();
@@ -34,13 +35,41 @@ app.post('/zIdLogin', async(req: Request, res: Response) => {
 
   const user = {
     userId: zId,
-    email: userInfo.email
+    email: userInfo.email,
+    society: false
   }
 
   const accessToken = generateAccessToken(user);
   const refreshToken = await generateRefreshToken(user);
   res.json({accessToken: accessToken, refreshToken: refreshToken});
 });
+
+app.post('/oauth', async(req: Request, res: Response) => {
+  const OAuthToken = req.body;
+
+  jwt.verify(OAuthToken, process.env.GOOGLE_OAUTH_SECRET as string);
+  
+  const decoded: OAuthToken = OAuthToken && jwt.decode(OAuthToken);
+
+  const society: Society = {
+    googleId: decoded.sub,
+    name: decoded.name,
+    email: decoded.email
+  }
+
+  await upsertSociety(society);
+
+  const payload: UserInfoToken = {
+    userId: decoded.sub,
+    email: decoded.email,
+    society: true
+  }
+
+  const newRefreshToken = await generateRefreshToken(payload);
+  const newAccessToken = generateAccessToken(payload);
+
+  res.json({accessToken: newAccessToken, refreshToken: newRefreshToken});
+})
 
 // Returns a new access token if refresh token is valid
 app.post('/getNewToken', async(req: Request, res: Response) => {
