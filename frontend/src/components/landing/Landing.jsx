@@ -3,11 +3,24 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import ProfileImage from '../../assets/logo.png';
 import { Avatar, Button, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import AnimatedBackground from "../animated-background/AnimatedBackground"
+import checkLoggedIn from '../../util/verifyUser';
 
 export default function Landing() {
   const navigate = useNavigate();
+  const [signedIn, setSignedIn] = React.useState(false);
+
+  React.useEffect(() => {
+      async () => {
+          const signed_in = await checkLoggedIn();
+          setSignedIn(signed_in);
+      } 
+  }, []);
+
+  if(signedIn) {
+    return <Navigate to="/events"/>;
+  }
   
   return (
       <><CssBaseline enableColorScheme />

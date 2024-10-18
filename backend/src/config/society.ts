@@ -37,3 +37,12 @@ export const createSociety = async (newSociety: Society) => {
 
     return createdSociety;
 };
+
+export const getSocietyFromID = async(googleId: string) => {
+    const data = await db.society.findUnique( {
+        where: {
+            googleId: googleId
+        }
+    });
+    return data;
+}

@@ -18,9 +18,11 @@ import { Society, updateSociety, createSociety } from './config/society';
 import { Attendee, createAttendeeProfile } from './config/attendee';
 import errorHandler from 'middleware-http-errors';
 
+import cors from 'cors';
 const app = express();
 const db = getDb();
 
+app.use(cors());
 app.use(express.json());
 dotenv.config();
 
@@ -30,10 +32,11 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/zIdLogin', async(req: Request, res: Response) => {
+  console.log(req.body);
   const zId = req.body.zId;
   const password = req.body.password;
   
-  if (!zId || !authenticateStudent(zId, password)) {
+  if (!zId || !await authenticateStudent(zId, password)) {
     res.status(401).send("INVALID LOGIN CREDENTIALS");
     return;
   }
@@ -43,6 +46,7 @@ app.post('/zIdLogin', async(req: Request, res: Response) => {
     res.json({accessToken: null, refreshToken: null, newUser: true});
     return;
   }
+  console.log(userInfo);
 
   const user = {
     userId: zId,
@@ -140,15 +144,14 @@ app.post('/logout', authenticateRefreshToken2, async(req: Request, res: Response
 })
 
 app.post('/signUp/attendee', async(req: Request, res: Response) => {
-  const { zId, name, email, discord, arcMember } = req.body;
-  const year = JSON.parse(req.body.year);
+  const { zId, name, email, discord, arcMember, year } = req.body;
   const payload: Attendee = {
     zId: zId,
     name: name,
     email: email,
     discord: discord,
     arcMember: arcMember,
-    year: year
+    year: parseInt(year)
   }
 
   await createAttendeeProfile(payload);

@@ -12,7 +12,8 @@ import ProfileImage from '../../assets/logo.png';
 import { Avatar, IconButton, InputAdornment, Typography } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import checkLoggedIn from '../../util/verifyUser';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -48,6 +49,18 @@ export default function AttendeeSignUp() {
     const [passwordError, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
     const navigate = useNavigate();
+    const [signedIn, setSignedIn] = React.useState(false);
+
+    React.useEffect(() => {
+        async () => {
+            const signed_in = await checkLoggedIn();
+            setSignedIn(signed_in);
+        } 
+    }, []);
+  
+    if(signedIn) {
+      return <Navigate to="/events"/>;
+    }
 
   const validateInputs = () => {
     const zId = document.getElementById('zId');
@@ -82,23 +95,25 @@ export default function AttendeeSignUp() {
       return;
     }
     const data = new FormData(event.currentTarget);
-    const {accessToken, refreshToken, newUser} = await fetch('http://localhost:5180/zIdLogin', {
+    const response = await fetch('http://localhost:5180/zIdLogin', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: {
+      body: JSON.stringify({
         zId: data.get("zId"),
         password: data.get("password")
-      }
+      })
     });
+    const {accessToken, refreshToken, newUser} = await response.json();
+
     if(newUser) {
       navigate('/signup/attendee', { state: { zId: data.get("zId")} });
     } else {
       localStorage.setItem(`present-refresh`, refreshToken);
       localStorage.setItem(`present-access`, accessToken);
-
+      navigate("/events");
     }
   };
 
