@@ -12,21 +12,28 @@ export interface Society {
     events?: SocietyEvent[]
 }
 
-export const upsertSociety = async (newSociety: Society) => {
-    const upsertedSociety = await db.society.upsert( {
+export const updateSociety = async (newSociety: Society) => {
+    const updatedSociety = await db.society.update( {
         where: {
             googleId: newSociety.googleId,
         },
-        create: {
-            googleId: newSociety.googleId,
-            name: newSociety.name,
-            email: newSociety.email,
-        },
-        update: {
+        data: {
             name: newSociety.name,
             email: newSociety.email,
         }
     });
 
-    return upsertedSociety;
+    return updatedSociety;
+};
+
+export const createSociety = async (newSociety: Society) => {
+    const createdSociety = await db.society.create( {
+        data: {
+            googleId: newSociety.googleId,
+            name: newSociety.name,
+            email: newSociety.email
+        }
+    });
+
+    return createdSociety;
 };

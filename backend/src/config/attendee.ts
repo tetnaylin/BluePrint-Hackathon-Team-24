@@ -15,25 +15,32 @@ export interface Attendee {
     response?: AttendanceResponse[]
 }
 
-export const upsertAttendeeProfile = async (newAttendee: Attendee) => {
-    const upsertedAttendee = await db.attendee.upsert( {
+export const updateAttendeeProfile = async (newAttendee: Attendee) => {
+    const upsertedAttendee = await db.attendee.update( {
         where: {
             zId: newAttendee.zId,
         },
-        create: {
+        data: {
+            name: newAttendee.name,
+            email: newAttendee.email,
+            discord: newAttendee.discord ?? "",
+            arcMember: newAttendee.arcMember,
+            year: newAttendee.year ?? 1
+        }
+    });
+
+    return upsertedAttendee;
+};
+
+export const createAttendeeProfile = async (newAttendee: Attendee) => {
+    const upsertedAttendee = await db.attendee.create( {
+        data: {
             zId: newAttendee.zId,
             name: newAttendee.name,
             email: newAttendee.email,
             discord: newAttendee.discord ?? "",
             arcMember: newAttendee.arcMember,
             year: newAttendee.year ?? 1
-        },
-        update: {
-            name: newAttendee.name || undefined,
-            email: newAttendee.email || undefined,
-            discord: newAttendee.discord || undefined,
-            arcMember: newAttendee.arcMember ? newAttendee.arcMember : undefined,
-            year: newAttendee.year || undefined
         }
     });
 
