@@ -1,8 +1,6 @@
 import express, { Request, Response } from 'express';
 import {
   authenticateStudent,
-  authenticateAccessToken,
-  authenticateRefreshToken,
   UserInfoToken,
   generateAccessToken,
   generateRefreshToken,

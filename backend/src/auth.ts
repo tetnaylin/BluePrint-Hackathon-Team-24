@@ -95,21 +95,21 @@ export const tokenGetUserInfo = async(zId: string) => {
     return {userId: zId, email: user.email};
   }
 
-export const authenticateAccessToken = (authHeader: string | undefined): UserInfoToken | undefined => {
+// export const authenticateAccessToken = (authHeader: string | undefined): UserInfoToken | undefined => {
   
-    if (!authHeader) {
-      return undefined;
-    }
-    const token = authHeader.split(' ')[1];
+//     if (!authHeader) {
+//       return undefined;
+//     }
+//     const token = authHeader.split(' ')[1];
   
-    try {
-        const user: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
-        return {userId: user.userId, email: user.email, society: user.society};
-    } catch (e) {
-        return undefined;;
-    }
+//     try {
+//         const user: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
+//         return {userId: user.userId, email: user.email, society: user.society};
+//     } catch (e) {
+//         return undefined;
+//     }
 
-}
+// }
 
 export const authenticateAccessToken2 = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
@@ -125,26 +125,26 @@ export const authenticateAccessToken2 = (req: Request, res: Response, next: Next
     });
 }
 
-export const authenticateRefreshToken = async (refreshToken: string | undefined): Promise<UserRefreshToken | undefined> => {
+// export const authenticateRefreshToken = async (refreshToken: string | undefined): Promise<UserRefreshToken | undefined> => {
   
-    if (!refreshToken) {
-        return undefined;
-    }
+//     if (!refreshToken) {
+//         return undefined;
+//     }
 
-    try {
-        const user: any = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string);
+//     try {
+//         const user: any = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string);
         
-        const validToken = await db.refreshToken.findUnique({
-            where: {
-                id: user.jti
-            }
-        })
-        if (!validToken || validToken === null) return undefined
-        return {userId: user.userId, email: user.email, society: user.society, jti: user.jti};
-    } catch (e) {
-        return undefined;
-    }
-}
+//         const validToken = await db.refreshToken.findUnique({
+//             where: {
+//                 id: user.jti
+//             }
+//         })
+//         if (!validToken || validToken === null) return undefined
+//         return {userId: user.userId, email: user.email, society: user.society, jti: user.jti};
+//     } catch (e) {
+//         return undefined;
+//     }
+// }
 
 export const authenticateRefreshToken2 = (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.body.refreshToken;
