@@ -26,11 +26,24 @@ const theme = createTheme( {
       },
       action: {
         active: "#EECE2F",
-        hover: "#EECE2F",
+        hover: "#938F99",
+        hoverOpacity: 0.05,
         selected: "#EECE2F",
         focus: "#EECE2F"
       },
       divider: "#938F99",
+      grey: {
+        400: "#938F99",
+        900: "#938F99",
+        800: "#938F99",
+        700: "#938F99",
+        600: "#938F99",
+        500: "#938F99",
+        300: "#938F99",
+        200: "#938F99",
+        100: "#938F99",
+        A700: "#938F99",
+      },
     },
     typography: {
       h1: {
@@ -45,8 +58,25 @@ const theme = createTheme( {
         fontSize: "1.5rem",
         fontWeight: 600,
       }
-    }
-  });
+    },
+    components: {
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: "#EECE2F", // Change the border color when focused
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#EECE2F'
+            },
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: '#938F99'
+            },
+          }
+          },
+        },
+      },
+    });
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

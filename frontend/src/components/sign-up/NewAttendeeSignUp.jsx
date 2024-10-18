@@ -9,9 +9,10 @@ import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import Input from '@mui/material/Input';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import ProfileImage from '../../assets/logo.png';
 import { Avatar, Typography } from '@mui/material';
+//import TopMenu from '../top-menu/TopMenu';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -41,18 +42,21 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignUp() {
+export default function AttendeeSignUp() {
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [zIdError, setzIdError] = React.useState(false);
   const [zIdErrorMessage, setzIdErrorMessage] = React.useState('');
+  const [yearError, setYearError] = React.useState(false);
+  const [yearErrorMessage, setYearErrorMessage] = React.useState('');
 
   const validateInputs = () => {
     const email = document.getElementById('email');
     const zId = document.getElementById('zId');
     const name = document.getElementById('name');
+    const year = document.getElementById('year');
 
     let isValid = true;
 
@@ -74,11 +78,20 @@ export default function SignUp() {
       setNameErrorMessage('');
     }
 
+    if (year.value < 0 || year.value > 20) {
+      setYearError(true);
+      setYearErrorMessage('Please a valid year of study.');
+      isValid = false;
+    } else {
+      setYearError(false);
+      setYearErrorMessage('');
+    }
+
     return isValid;
   };
 
   const handleSubmit = (event) => {
-    if (nameError || emailError || zIdError) {
+    if (nameError || emailError || zIdError || yearError) {
       event.preventDefault();
       return;
     }
@@ -88,13 +101,15 @@ export default function SignUp() {
       lastName: data.get('lastName'),
       email: data.get('email'),
       zId: data.get('zId'),
+      year: data.get('year')
     });
   };
 
   const attendeezId = "z12345678";
 
   return (
-      <><CssBaseline enableColorScheme /><SignUpContainer direction="column" justifyContent="space-between">
+      <>
+      <CssBaseline enableColorScheme /><SignUpContainer direction="column" justifyContent="space-between">
       <Card variant="outlined">
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
           <Avatar
@@ -111,7 +126,7 @@ export default function SignUp() {
             <FormLabel
               htmlFor="name"
               sx={{ display: 'flex', alignSelf: 'flex-start', color: "primary.main"}}
-            >Full name <Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
+            >Full Name <Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
             <Input
               autoComplete="name"
               name="name"
@@ -154,7 +169,7 @@ export default function SignUp() {
               type="zId"
               id="zId"
               variant="outlined"
-              color={'primary'} />
+              sx={{ display: 'flex', alignSelf: 'flex-start' }} />
           </FormControl>
           <FormControl>
             <FormLabel
@@ -168,6 +183,22 @@ export default function SignUp() {
               id="name"
               placeholder="itz_potato"
               color={nameError ? 'red' : 'secondary'}
+              sx={{"&:before": { borderColor: "primary.main" }}} />
+          </FormControl>
+          <FormControl>
+            <FormLabel
+              htmlFor="year"
+              sx={{ display: 'flex', alignSelf: 'flex-start' }}
+            >Year of Study</FormLabel>
+            <Input
+              autoComplete="year"
+              name="year"
+              fullWidth
+              id="year"
+              placeholder="1, 2, 3, ..."
+              error={yearError}
+              helperText={yearErrorMessage}
+              color={yearError ? 'red' : 'secondary'}
               sx={{"&:before": { borderColor: "primary.main" }}} />
           </FormControl>
           <Box
