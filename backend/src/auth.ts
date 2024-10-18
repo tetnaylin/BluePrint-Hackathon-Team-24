@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { getDb } from './config/db';
+import { Request, Response, NextFunction } from 'express';
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ export interface UserRefreshToken {
     jti: string;
 }
 
-export interface RefreshToken {
+export interface DatabaseRefreshToken {
     id: string;
 }
 
@@ -38,7 +39,7 @@ export interface OAuthToken{
     iat: Date,
     exp: Date,
     jti: string
-  }
+}
 
 // It's for the backend, so I think it's fine if we export this
 // Input: (zID: string, password: string)
@@ -105,10 +106,24 @@ export const authenticateAccessToken = (authHeader: string | undefined): UserInf
         const user: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
         return {userId: user.userId, email: user.email, society: user.society};
     } catch (e) {
-        return undefined;
+        return undefined;;
     }
 
-  }
+}
+
+export const authenticateAccessToken2 = (req: Request, res: Response, next: NextFunction) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    jwt.verify(token as string, process.env.ACCESS_TOKEN_SECRET as string, (err: any, user: any) => {
+        if (err) {
+            res.send(401).send("Invalid Token");
+        }
+
+        req.body = user;
+        next();
+    });
+}
 
 export const authenticateRefreshToken = async (refreshToken: string | undefined): Promise<UserRefreshToken | undefined> => {
   
@@ -129,6 +144,30 @@ export const authenticateRefreshToken = async (refreshToken: string | undefined)
     } catch (e) {
         return undefined;
     }
+}
+
+export const authenticateRefreshToken2 = (req: Request, res: Response, next: NextFunction) => {
+    const refreshToken = req.body.refreshToken;
+
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string, async(err: any, user: any) => {
+        if (err) {
+            next(err);
+        }
+
+        const validToken = await db.refreshToken.findUnique({
+            where: {
+                id: user.jti
+            }
+        })
+
+        if (!validToken) {
+            res.status(403).send("Already Logged Out");
+            return;
+        }
+
+        req.body = user;
+        next();
+    });
 }
 
 export const generateAccessToken = (payload: UserInfoToken) => {
