@@ -120,7 +120,7 @@ export const authenticateAccessToken2 = (req: Request, res: Response, next: Next
             res.send(401).send("Invalid Token");
         }
 
-        req.body = user;
+        res.locals.user = user;
         next();
     });
 }
