@@ -28,7 +28,7 @@ function App() {
         <Route path="/newevent" element={<ManageEvent/>} />
         <Route path="/submitted" element={<FormSubmitted />} />
         <Route path="/eventname" element={<EventPage/>} />
-        <Route path="/test" element={<ViewAllOrUpcomingEvents/>} />
+        <Route path="/all-events" element={<ViewAllOrUpcomingEvents/>} />
       </Routes>
     </BrowserRouter>
   )
