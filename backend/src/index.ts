@@ -212,7 +212,7 @@ app.get('/event/all', authenticateAccessToken2, async(req: Request, res: Respons
   res.json({data: allEvents});
 })
 
-app.get('/autosubmit', async(req: Request, res: Response) => {
+app.post('/autosubmit', authenticateAccessToken2, async(req: Request, res: Response) => {
   const { formUrl } = req.body;
   
 });

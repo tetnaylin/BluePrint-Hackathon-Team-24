@@ -17,6 +17,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import AccountMenu from './AccountMenu';
 import { Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import ProfileImage from '../../assets/logo.png';
 
 const drawerWidth = 240;
 
@@ -24,6 +26,8 @@ const societyArray = ['Upcoming Events', 'All Events', 'Create New Event'];
 const attendeeArray = ['My Events', 'My Societies', 'All Events', 'All Societies'];
 
 export default function TopMenu(props) {
+
+    const navigate = useNavigate();
     
     const currArray = props.isSociety ? societyArray : attendeeArray;
     const { window } = props;
@@ -82,6 +86,19 @@ export default function TopMenu(props) {
         >
           <MenuIcon />
         </IconButton>
+        <IconButton
+        color="primary"
+        edge="start"
+        onClick={navigate("/")}
+        sx={{ margin: "auto"}}
+        >
+          <Box
+          component="img"
+          src={ProfileImage}
+          sx={{ width: 50, height: 50}}
+          />
+        </IconButton>
+
 
     <Box
       component="nav"
