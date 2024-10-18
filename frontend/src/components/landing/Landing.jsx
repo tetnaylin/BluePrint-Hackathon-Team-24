@@ -1,13 +1,12 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
 import ProfileImage from '../../assets/logo.png';
 import { Avatar, Button, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export default function Landing() {
+  const navigate = useNavigate();
   
   return (
       <><CssBaseline enableColorScheme />
@@ -27,6 +26,8 @@ export default function Landing() {
         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 10, justifyContent: 'center', pt: '15%' }}>
           <Button
             // type="submit"
+            onClick={() => navigate("/login/attendee")}
+            disableRipple
             variant="outlined"
             color="secondary"
             size="large"
@@ -41,7 +42,8 @@ export default function Landing() {
             ATTENDEE
           </Button>
           <Button
-            // type="cancel"
+            onClick={() => navigate("/login/society")}
+            disableRipple
             variant="outlined"
             color="secondary"
             size="large"

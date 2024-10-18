@@ -47,12 +47,12 @@ const theme = createTheme( {
     },
     typography: {
       h1: {
-        fontSize: "3rem",
+        fontSize: 60,
         fontWeight: 600,
       },
       h2: {
-        fontSize: "1.75rem",
-        fontWeight: 600,
+        fontSize: 50,
+        fontWeight: 400,
       },
       h3: {
         fontSize: "1.5rem",
