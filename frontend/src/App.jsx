@@ -8,6 +8,7 @@ import NewAttendeeSignUp from "./components/sign-up/NewAttendeeSignUp"
 import ManageEvent from "./pages/CreateEditEvent"
 import FormSubmitted from "./components/form-submitted/FormSubmitted"
 import EventPage from "./pages/EventPage"
+import EventsTabs from "./components/events-tabs/EventsTabs"
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/newevent" element={<ManageEvent/>} />
         <Route path="/submitted" element={<FormSubmitted />} />
         <Route path="/eventname" element={<EventPage/>} />
+        <Route path="/test" element={<EventsTabs/>} />
       </Routes>
     </BrowserRouter>
   )
