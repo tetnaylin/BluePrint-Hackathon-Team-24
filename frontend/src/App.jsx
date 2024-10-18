@@ -10,7 +10,7 @@ import FormSubmitted from "./components/form-submitted/FormSubmitted"
 import EventPage from "./pages/EventPage"
 import ViewAllOrUpcomingEvents from "./pages/ViewAllOrUpcomingEvents"
 import ActionAreaCard from "./components/event-card/EventCard"
-
+import NewSocietySignUp from "./components/new-society-sign-up/NewSocietySignUp"
 
 function App() {
 
@@ -21,7 +21,7 @@ function App() {
         <Route path="/attendee-sign-up" element={<AttendeeSignUp />} />
         <Route path="/new-attendee-sign-up" element={<NewAttendeeSignUp />} />
         <Route path="/society-sign-up" element={<SocietySignUp />} />
-        {/* <Route path="/new-society-sign-up" element={< />} /> */}
+        <Route path="/new-society-sign-up" element={<NewSocietySignUp />} />
         {/* <Route path="/" element={<Landing />} /> */}
         {/* to change to "/sign-up" afterwards */}
         <Route path="/scanned" element={<QrCodeScanned />} />
