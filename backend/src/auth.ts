@@ -103,7 +103,6 @@ export const authenticateAccessToken = (authHeader: string | undefined): UserInf
   
     try {
         const user: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
-        console.log(user);
         return {userId: user.userId, email: user.email, society: user.society};
     } catch (e) {
         return undefined;
@@ -133,12 +132,12 @@ export const authenticateRefreshToken = async (refreshToken: string | undefined)
 }
 
 export const generateAccessToken = (payload: UserInfoToken) => {
-    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, {algorithm: "RS256", expiresIn: "10m"});
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, {algorithm: "HS256", expiresIn: "10m"});
 }
 
 export const generateRefreshToken = async(payload: UserInfoToken) => {
     const randomId = crypto.randomUUID();
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET as string, {algorithm: "RS256", expiresIn: "90d", jwtid: randomId});
+    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET as string, {algorithm: "HS256", expiresIn: "90d", jwtid: randomId});
     await db.refreshToken.create({
         data: {
             id: randomId

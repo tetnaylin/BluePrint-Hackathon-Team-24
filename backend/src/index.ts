@@ -5,7 +5,8 @@ import { getDb } from './config/db';
 import { testDb } from './config/testdb';
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { Society, upsertSociety } from './config/society';
+import { Society, updateSociety, createSociety } from './config/society';
+import { Attendee, createAttendeeProfile } from './config/attendee';
 
 const app = express();
 const db = getDb();
@@ -29,7 +30,7 @@ app.post('/zIdLogin', async(req: Request, res: Response) => {
 
   const userInfo = await tokenGetUserInfo(zId);
   if (!userInfo) {
-    res.status(404).send("USER NOT FOUND");
+    res.json({accessToken: null, refreshToken: null, newUser: true});
     return;
   }
 
@@ -41,7 +42,7 @@ app.post('/zIdLogin', async(req: Request, res: Response) => {
 
   const accessToken = generateAccessToken(user);
   const refreshToken = await generateRefreshToken(user);
-  res.json({accessToken: accessToken, refreshToken: refreshToken});
+  res.json({accessToken: accessToken, refreshToken: refreshToken, newUser: false});
 });
 
 app.post('/oauth', async(req: Request, res: Response) => {
@@ -56,8 +57,12 @@ app.post('/oauth', async(req: Request, res: Response) => {
     name: decoded.name,
     email: decoded.email
   }
-
-  await upsertSociety(society);
+  const socInDb = (db.society.findUnique({where: { googleId: society.googleId } }));
+  if (!socInDb) {
+    res.json({accessToken: null, refreshToken: null, newUser: true});
+    return;
+  }
+  await updateSociety(society);
 
   const payload: UserInfoToken = {
     userId: decoded.sub,
@@ -68,7 +73,7 @@ app.post('/oauth', async(req: Request, res: Response) => {
   const newRefreshToken = await generateRefreshToken(payload);
   const newAccessToken = generateAccessToken(payload);
 
-  res.json({accessToken: newAccessToken, refreshToken: newRefreshToken});
+  res.json({accessToken: newAccessToken, refreshToken: newRefreshToken, newUser: false});
 })
 
 // Returns a new access token if refresh token is valid
@@ -90,9 +95,8 @@ app.post('/getNewToken', async(req: Request, res: Response) => {
 //For testing tokens and also exmaple of using authenticateAccessToken
 app.get('/checkValidToken', (req: Request, res: Response) => {
   const user = authenticateAccessToken(req.headers['authorization']);
-  console.log(user);
 
-  if (!user) {
+  if (!user || !user.society) {
     res.sendStatus(403);
     return;
   }
@@ -116,6 +120,54 @@ app.post('/logout', async(req: Request, res: Response) => {
 
   // If userRefreshToken is already invalid just return;
   res.json("User Logged Out");
+})
+
+app.post('/signUp/attendee', async(req: Request, res: Response) => {
+  const { zId, name, email, discord, arcMember } = req.body;
+  const year = JSON.parse(req.body.year);
+  const payload: Attendee = {
+    zId: zId,
+    name: name,
+    email: email,
+    discord: discord,
+    arcMember: arcMember,
+    year: year
+  }
+
+  await createAttendeeProfile(payload);
+  
+  const tokenPayload = {
+    userId: zId,
+    email: email,
+    society: false
+  }
+
+  const accessToken = generateAccessToken(tokenPayload);
+  const refreshToken = await generateRefreshToken(tokenPayload);
+
+  res.json({accessToken: accessToken, refreshToken: refreshToken});
+})
+
+app.post('/signUp/society', async(req: Request, res: Response) => {
+  const { googleId, name, email } = req.body;
+  const payload: Society = {
+    googleId: googleId,
+    name: name,
+    email: email
+  }
+
+  await createSociety(payload);
+
+  const tokenPayload = {
+    userId: googleId,
+    email: email,
+    society: true
+  }
+
+  const accessToken = generateAccessToken(tokenPayload);
+  const refreshToken = await generateRefreshToken(tokenPayload);
+
+  res.json({accessToken: accessToken, refreshToken: refreshToken});
 })
 
 app.listen(SERVER_PORT, () => {

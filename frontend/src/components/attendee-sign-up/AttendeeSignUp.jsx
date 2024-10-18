@@ -82,16 +82,20 @@ export default function AttendeeSignUp() {
       return;
     }
     const data = new FormData(event.currentTarget);
-    // const {accessToken, refreshToken, newUser} = await fetch('http://localhost:5180/zIdLogin', {
-    //   method: 'POST',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //     },
-    //});
-    //if(newUser) {
+    const {accessToken, refreshToken, newUser} = await fetch('http://localhost:5180/zIdLogin', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: {
+        zId: data.get("zId"),
+        password: data.get("password")
+      }
+    });
+    if(newUser) {
       navigate('/signup/attendee', { state: { zId: data.get("zId")} });
-    //}
+    }
   };
 
   const [showPassword, setShowPassword] = React.useState(false);
