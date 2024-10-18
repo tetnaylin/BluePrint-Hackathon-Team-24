@@ -20,7 +20,12 @@ import { Typography } from '@mui/material';
 
 const drawerWidth = 240;
 
+const societyArray = ['Upcoming Events', 'All Events', 'Create New Event'];
+const attendeeArray = ['My Events', 'My Societies', 'All Events', 'All Societies'];
+
 export default function TopMenu(props) {
+    
+    const currArray = props.isSociety ? societyArray : attendeeArray;
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [isClosing, setIsClosing] = React.useState(false);
@@ -45,25 +50,9 @@ export default function TopMenu(props) {
         <Toolbar />
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          {currArray.map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
+              <ListItemButton display="flex" justifyContent="center">
                 <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>

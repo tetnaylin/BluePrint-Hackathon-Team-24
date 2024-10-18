@@ -9,6 +9,7 @@ import ManageEvent from "./pages/CreateEditEvent"
 import FormSubmitted from "./components/form-submitted/FormSubmitted"
 import EventPage from "./pages/EventPage"
 import ViewAllOrUpcomingEvents from "./pages/ViewAllOrUpcomingEvents"
+import ViewCurrentEvents from "./pages/ViewCurrentEvents"
 import NewSocietySignUp from "./components/new-society-sign-up/NewSocietySignUp"
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path="/submitted" element={<FormSubmitted />} />
         <Route path="/eventname" element={<EventPage/>} />
         <Route path="/all-events" element={<ViewAllOrUpcomingEvents/>} />
+        <Route path="/events" element={<ViewCurrentEvents/>} />
       </Routes>
     </BrowserRouter>
   )

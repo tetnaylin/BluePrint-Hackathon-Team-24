@@ -42,7 +42,7 @@ LinkTab.propTypes = {
   selected: PropTypes.bool,
 };
 
-export default function NavTabs() {
+export default function NavTabs( { isSociety } ) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -72,8 +72,13 @@ export default function NavTabs() {
           
         }}
       >
-        <LinkTab label="Upcoming events" href="/event" indicatorColor="secondary" />
-        <LinkTab label="All events" href="/event" />
+        <LinkTab 
+          label={isSociety ? "Upcoming events" : "My Societies"}
+         href="/event" 
+         indicatorColor="secondary" />
+        <LinkTab 
+        label={isSociety ? "All events" : "All Societies"} 
+        />
       </Tabs>
     </Box>
     
