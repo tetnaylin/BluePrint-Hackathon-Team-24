@@ -10,6 +10,7 @@ import FormSubmitted from "./components/form-submitted/FormSubmitted"
 import EventPage from "./pages/EventPage"
 import ViewAllOrUpcomingEvents from "./pages/ViewAllOrUpcomingEvents"
 import ActionAreaCard from "./components/event-card/EventCard"
+import ViewCurrentEvents from "./pages/ViewCurrentEvents"
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/submitted" element={<FormSubmitted />} />
         <Route path="/eventname" element={<EventPage/>} />
         <Route path="/all-events" element={<ViewAllOrUpcomingEvents/>} />
+        <Route path="/events" element={<ViewCurrentEvents/>} />
       </Routes>
     </BrowserRouter>
   )
