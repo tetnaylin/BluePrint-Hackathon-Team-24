@@ -98,7 +98,7 @@ export default function UploadImage(props) {
       }}
     >
       <input {...getInputProps()} />
-      <CloudUploadIcon sx={{ fontSize: 50, color: 'primary.main' }} />
+      <CloudUploadIcon sx={{ color: 'primary.main' }} />
       <Typography variant="h3" sx={{ mt: 1 }}>
         Upload your image
       </Typography>
