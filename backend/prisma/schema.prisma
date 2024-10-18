@@ -53,3 +53,7 @@ model AttendanceResponse {
   @@unique([attendeeId, eventId], name: "unique_attendee_event")
   @@unique([formResponse, eventId], name: "unique_form_response_event")
 }
+
+model RefreshToken {
+  id  String @id
+}

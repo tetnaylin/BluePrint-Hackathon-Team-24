@@ -1,10 +1,24 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import { getDb } from './config/db';
+
 dotenv.config();
+
+const db = getDb();
 
 export interface UserInfoToken {
     userId: string;
     email: string;
+}
+
+export interface UserRefreshToken {
+    userId: string;
+    email: string;
+    jti: string;
+}
+
+interface RefreshToken {
+    id: string;
 }
 
 // It's for the backend, so I think it's fine if we export this
@@ -45,6 +59,22 @@ export async function authenticateStudent(zID: string, password: string): Promis
     }
     return true;
 }
+
+export const tokenGetUserInfo = async(zId: string) => {
+    const user = await db.attendee.findUnique({
+      where: {
+        zId: zId
+      },
+      select: {
+        email: true
+      }
+    });
+  
+    if (user === null) return undefined;
+  
+    return {userId: zId, email: user.email};
+  }
+
 export const authenticateAccessToken = (authHeader: string | undefined): UserInfoToken | undefined => {
   
     if (!authHeader) {
@@ -54,7 +84,7 @@ export const authenticateAccessToken = (authHeader: string | undefined): UserInf
   
     try {
         const user: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
-        console.log(user)
+        console.log(user);
         return {userId: user.userId, email: user.email};
     } catch (e) {
         return undefined;
@@ -62,7 +92,7 @@ export const authenticateAccessToken = (authHeader: string | undefined): UserInf
 
   }
 
-export const authenticateRefreshToken = (refreshToken: string | undefined): UserInfoToken | undefined => {
+export const authenticateRefreshToken = async (refreshToken: string | undefined): Promise<UserRefreshToken | undefined> => {
   
     if (!refreshToken) {
         return undefined;
@@ -70,9 +100,31 @@ export const authenticateRefreshToken = (refreshToken: string | undefined): User
 
     try {
         const user: any = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET as string);
-        console.log(user)
-        return {userId: user.userId, email: user.email};
+        
+        const validToken = await db.refreshToken.findUnique({
+            where: {
+                id: user.jti
+            }
+        })
+        if (!validToken || validToken === null) return undefined
+        return {userId: user.userId, email: user.email, jti: user.jti};
     } catch (e) {
         return undefined;
     }
+}
+
+export const generateAccessToken = (payload: UserInfoToken) => {
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, {algorithm: "HS256", expiresIn: "20s"});
+}
+
+export const generateRefreshToken = async(payload: UserInfoToken) => {
+    const randomId = crypto.randomUUID();
+    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET as string, {algorithm: "HS256", expiresIn: "90d", jwtid: randomId});
+    await db.refreshToken.create({
+        data: {
+            id: randomId
+        }
+    })
+
+    return refreshToken;
 }
