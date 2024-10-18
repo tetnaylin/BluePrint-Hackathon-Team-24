@@ -8,7 +8,9 @@ import NewAttendeeSignUp from "./components/sign-up/NewAttendeeSignUp"
 import ManageEvent from "./pages/CreateEditEvent"
 import FormSubmitted from "./components/form-submitted/FormSubmitted"
 import EventPage from "./pages/EventPage"
-import EventsTabs from "./components/events-tabs/EventsTabs"
+import ViewAllOrUpcomingEvents from "./pages/ViewAllOrUpcomingEvents"
+import ActionAreaCard from "./components/event-card/EventCard"
+
 
 function App() {
 
@@ -26,7 +28,7 @@ function App() {
         <Route path="/newevent" element={<ManageEvent/>} />
         <Route path="/submitted" element={<FormSubmitted />} />
         <Route path="/eventname" element={<EventPage/>} />
-        <Route path="/test" element={<EventsTabs/>} />
+        <Route path="/test" element={<ViewAllOrUpcomingEvents/>} />
       </Routes>
     </BrowserRouter>
   )

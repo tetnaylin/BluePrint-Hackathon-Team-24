@@ -56,7 +56,7 @@ export default function NavTabs() {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', marginTop: '15%' }}>
       <Tabs
         value={value}
         onChange={handleChange}
@@ -76,5 +76,6 @@ export default function NavTabs() {
         <LinkTab label="All events" href="/event" />
       </Tabs>
     </Box>
+    
   );
 }
