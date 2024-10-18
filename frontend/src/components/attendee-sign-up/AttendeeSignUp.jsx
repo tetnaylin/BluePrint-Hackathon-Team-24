@@ -118,6 +118,7 @@ export default function AttendeeSignUp() {
         <Typography
           component="h1"
           variant="h4"
+          align={'center'}
           sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2rem)' }}
         >
           GREETINGS ATTENDEE
@@ -125,6 +126,7 @@ export default function AttendeeSignUp() {
         <Typography
           component="h1"
           variant="h4"
+          align={'center'}
           sx={{ width: '100%', fontSize: 'clamp(0.7rem, 2.7vw, 0.7rem)' }}
         >
           If you're managing a society, you're in the wrong place :(
