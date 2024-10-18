@@ -212,6 +212,11 @@ app.get('/event/all', authenticateAccessToken2, async(req: Request, res: Respons
   res.json({data: allEvents});
 })
 
+app.get('/autosubmit', async(req: Request, res: Response) => {
+  const { formUrl } = req.body;
+  
+});
+
 app.listen(SERVER_PORT, () => {
   console.log(`Server running on port http://localhost:${SERVER_PORT}`);
 });

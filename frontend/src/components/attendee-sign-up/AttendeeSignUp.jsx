@@ -95,6 +95,10 @@ export default function AttendeeSignUp() {
     });
     if(newUser) {
       navigate('/signup/attendee', { state: { zId: data.get("zId")} });
+    } else {
+      localStorage.setItem(`present-refresh`, refreshToken);
+      localStorage.setItem(`present-access`, accessToken);
+
     }
   };
 

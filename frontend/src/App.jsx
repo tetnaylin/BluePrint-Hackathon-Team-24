@@ -11,6 +11,8 @@ import EventPage from "./pages/EventPage"
 import ViewAllOrUpcomingEvents from "./pages/ViewAllOrUpcomingEvents"
 import ViewCurrentEvents from "./pages/ViewCurrentEvents"
 import NewSocietySignUp from "./components/new-society-sign-up/NewSocietySignUp"
+import Autosubmit from "./pages/autosubmit"
+
 
 function App() {
 
@@ -30,6 +32,8 @@ function App() {
         <Route path="/eventname" element={<EventPage/>} />
         <Route path="/all-events" element={<ViewAllOrUpcomingEvents/>} />
         <Route path="/events" element={<ViewCurrentEvents/>} />
+        <Route path="/submit/:formId" element={<Autosubmit/>} />
+        <Route path="/forms/d/e/:formId/viewform?" element={<Autosubmit/>} />
       </Routes>
     </BrowserRouter>
   )
