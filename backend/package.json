@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --exec ts-node src/index.ts",
+    "start": "nodemon --exec ts-node src/index.ts",
     "start-env": "nodemon -r dotenv/config --exec ts-node src/index.ts"
   },
   "keywords": [],
@@ -30,6 +31,13 @@
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
     "middleware-http-errors": "^0.1.2",
-    "puppeteer": "^23.6.0"
-  }
+    "pre-commit": "^1.2.2",
+    "puppeteer": "^23.6.0",
+    "rimraf": "^6.0.1"
+  },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+]
 }
