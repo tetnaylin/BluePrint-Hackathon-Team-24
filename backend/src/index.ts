@@ -15,10 +15,11 @@ import { testDb } from './config/testdb';
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Society, updateSociety, createSociety } from './config/society';
-import { Attendee, createAttendeeProfile } from './config/attendee';
+import { Attendee, createAttendeeProfile, getAttendeeFromID } from './config/attendee';
 import errorHandler from 'middleware-http-errors';
 
 import cors from 'cors';
+import { submitForm } from './util/form-filler';
 const app = express();
 const db = getDb();
 
@@ -32,7 +33,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/zIdLogin', async(req: Request, res: Response) => {
-  console.log(req.body);
+  console.log(req.body.zId);
   const zId = req.body.zId;
   const password = req.body.password;
   
@@ -46,7 +47,6 @@ app.post('/zIdLogin', async(req: Request, res: Response) => {
     res.json({accessToken: null, refreshToken: null, newUser: true});
     return;
   }
-  console.log(userInfo);
 
   const user = {
     userId: zId,
@@ -107,6 +107,7 @@ app.post('/getNewToken', authenticateRefreshToken2, async(req: Request, res: Res
   }
   
   const newAccessToken = generateAccessToken(newPayload);
+  console.log(`new token: ${newAccessToken}`);
 
   res.json({accessToken: newAccessToken});
 })
@@ -216,8 +217,28 @@ app.get('/event/all', authenticateAccessToken2, async(req: Request, res: Respons
 })
 
 app.post('/autosubmit', authenticateAccessToken2, async(req: Request, res: Response) => {
+  const user = res.locals.user;
   const { formUrl } = req.body;
-  
+  if (!user) {
+    res.sendStatus(403);
+  }
+
+  if (!user?.society) {
+    const userDetails = await getAttendeeFromID(user.userId);
+
+    if(!userDetails) {
+      res.json(false);
+      return;
+    }
+
+    const response = await submitForm(formUrl, userDetails);
+
+    res.json(response);
+    return;
+  }
+
+    res.json(false);
+    return;
 });
 
 app.listen(SERVER_PORT, () => {

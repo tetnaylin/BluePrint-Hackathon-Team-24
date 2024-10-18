@@ -52,15 +52,19 @@ export default function AttendeeSignUp() {
     const [signedIn, setSignedIn] = React.useState(false);
 
     React.useEffect(() => {
-        async () => {
-            const signed_in = await checkLoggedIn();
-            setSignedIn(signed_in);
-        } 
-    }, []);
-  
+      const loginCheck = async () => {
+          const signed_in = await checkLoggedIn();
+          setSignedIn(signed_in);
+      } 
+      loginCheck();
+  }, []);
+
+  React.useEffect(() => {
+    console.log(signedIn);
     if(signedIn) {
-      return <Navigate to="/events"/>;
+      navigate("/events");
     }
+  }, [signedIn]);
 
   const validateInputs = () => {
     const zId = document.getElementById('zId');
@@ -113,6 +117,7 @@ export default function AttendeeSignUp() {
     } else {
       localStorage.setItem(`present-refresh`, refreshToken);
       localStorage.setItem(`present-access`, accessToken);
+
       navigate("/events");
     }
   };

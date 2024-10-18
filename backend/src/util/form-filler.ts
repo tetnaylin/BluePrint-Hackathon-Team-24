@@ -19,7 +19,7 @@ interface ResponseData {
 /***
  * Returns "ok" on success, otherwise returns prefill url
  */
-const submitForm = async(url: string, attendee: Attendee) => {
+export const submitForm = async(url: string, attendee: Attendee) => {
   const formDataArr = await scrapeGoogleForm(url);
   let canAuto = true;
   
@@ -67,7 +67,7 @@ const submitForm = async(url: string, attendee: Attendee) => {
 
     return {
       entryId: formData.entryId,
-      response: response
+      response: encodeURIComponent(response)
     }
   });
 
@@ -98,6 +98,7 @@ const submitForm = async(url: string, attendee: Attendee) => {
 }
 
 const completeSubmission = async (url: string) => {
+  console.log(`url: ${url}`);
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   await page.setRequestInterception(true);
@@ -111,13 +112,13 @@ const completeSubmission = async (url: string) => {
   });
   await page.setViewport({ width: 1280, height: 800 });
   await page.goto(url);
-
   const buttonClass = ".uArJ5e.UQuaGc.Y5sE8d.VkkpIf.QvWxOd";
   await page.waitForSelector(buttonClass);
 
   await page.click(buttonClass);
-  
+  //await page.screenshot( {path: 'screenshot.png' });
   await page.waitForSelector('.vHW8K');
+  //await page.screenshot( {path: 'screenshot2.png' });
 
   const submittedUrl = page.url();
 

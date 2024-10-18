@@ -26,7 +26,7 @@ function App() {
         <Route path="/new-society-sign-up" element={<NewSocietySignUp />} />
         {/* <Route path="/" element={<Landing />} /> */}
         {/* to change to "/sign-up" afterwards */}
-        <Route path="/scanned" element={<QrCodeScanned />} />
+        <Route path="/option" element={<QrCodeScanned />} />
         <Route path="/newevent" element={<ManageEvent/>} />
         <Route path="/submitted" element={<FormSubmitted />} />
         <Route path="/eventname" element={<EventPage/>} />

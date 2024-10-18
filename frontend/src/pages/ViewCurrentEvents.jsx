@@ -10,10 +10,11 @@ function ViewCurrentEvents() {
     const [signedIn, setSignedIn] = useState(false);
 
     useEffect(() => {
-        async () => {
+        const loginCheck =async () => {
             const signed_in = await checkLoggedIn();
             setSignedIn(signed_in);
-        } 
+        };
+        loginCheck();
     }, []);
     
 
