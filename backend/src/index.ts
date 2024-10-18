@@ -110,7 +110,7 @@ app.post('/getNewToken', authenticateRefreshToken2, async(req: Request, res: Res
 
 //For testing tokens and also exmaple of using authenticateAccessToken
 app.get('/checkValidToken', authenticateAccessToken2, (req: Request, res: Response) => {
-  const user: UserInfoToken = req.body;
+  const user = res.locals.user;
   console.log(user)
 
   if (!user || user.society) {
@@ -189,7 +189,7 @@ app.post('/signUp/society', async(req: Request, res: Response) => {
 
 app.get('/event/all', authenticateAccessToken2, async(req: Request, res: Response) => {
   // const user = authenticateAccessToken(req.headers['authorization']);
-  const user = req.body
+  const user = res.locals.user;
   if (!user) {
     res.sendStatus(403);
   }
