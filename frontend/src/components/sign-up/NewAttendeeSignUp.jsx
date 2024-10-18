@@ -12,6 +12,7 @@ import Input from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
 import ProfileImage from '../../assets/logo.png';
 import { Avatar, Typography } from '@mui/material';
+import { useLocation, useNavigate, Navigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -50,6 +51,15 @@ export default function AttendeeSignUp() {
   const [zIdErrorMessage, setzIdErrorMessage] = React.useState('');
   const [yearError, setYearError] = React.useState(false);
   const [yearErrorMessage, setYearErrorMessage] = React.useState('');
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const data = location.state
+  if(!data) {
+    return <Navigate to="/"/>;
+  }
+
+  const attendeezId = data.zId;
 
   const validateInputs = () => {
     const email = document.getElementById('email');
@@ -104,8 +114,6 @@ export default function AttendeeSignUp() {
     });
   };
 
-  const attendeezId = "z12345678";
-
   return (
       <>
       <CssBaseline enableColorScheme /><SignUpContainer direction="column" justifyContent="space-between">
@@ -132,7 +140,7 @@ export default function AttendeeSignUp() {
               required
               fullWidth
               id="name"
-              placeholder="Supreme Potato"
+              placeholder="Your Full Name"
               error={nameError}
               helperText={nameErrorMessage}
               color={nameError ? 'red' : 'secondary'}
@@ -147,7 +155,7 @@ export default function AttendeeSignUp() {
               required
               fullWidth
               id="email"
-              placeholder="potatoiskool@email.com"
+              placeholder="example@example.com"
               name="email"
               autoComplete="email"
               error={emailError}

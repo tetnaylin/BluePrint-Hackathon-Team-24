@@ -18,9 +18,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/attendee-sign-up" element={<AttendeeSignUp />} />
-        <Route path="/new-attendee-sign-up" element={<NewAttendeeSignUp />} />
-        <Route path="/society-sign-up" element={<SocietySignUp />} />
+        <Route path="/login/attendee" element={<AttendeeSignUp />} />
+        <Route path="/signup/attendee" element={<NewAttendeeSignUp />} />
+        <Route path="/login/society" element={<SocietySignUp />} />
         {/* <Route path="/new-society-sign-up" element={< />} /> */}
         {/* <Route path="/" element={<Landing />} /> */}
         {/* to change to "/sign-up" afterwards */}
