@@ -19,7 +19,7 @@ function ViewAllOrUpcomingEvents() {
           fontSize: 'clamp(2rem, 10vw, 2rem)', 
           pt: '5%', 
           textAlign: 'center',
-          color: 'secondar.main'
+          color: 'secondary.main'
         }}
       >
         UPCOMING EVENTS
