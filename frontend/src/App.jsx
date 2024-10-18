@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import './App.css'
-import SignUp from './components/sign-up/SignUp'
 import QrCodeScanned from './components/qr-code-scanned/QrCodeScanned'
 import SocietySignUp from "./components/society-sign-up/SocietySignUp"
 import AttendeeSignUp from "./components/attendee-sign-up/AttendeeSignUp"
