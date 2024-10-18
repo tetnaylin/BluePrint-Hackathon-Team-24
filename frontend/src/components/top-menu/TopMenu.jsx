@@ -89,7 +89,7 @@ export default function TopMenu(props) {
         <IconButton
         color="primary"
         edge="start"
-        onClick={navigate("/")}
+        onClick={()=>navigate("/")}
         sx={{ margin: "auto"}}
         >
           <Box
