@@ -1,9 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
 import ProfileImage from '../../assets/logo.png';
 import { Avatar, Button, Typography } from '@mui/material';
 
