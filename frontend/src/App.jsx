@@ -9,8 +9,8 @@ import ManageEvent from "./pages/CreateEditEvent"
 import FormSubmitted from "./components/form-submitted/FormSubmitted"
 import EventPage from "./pages/EventPage"
 import ViewAllOrUpcomingEvents from "./pages/ViewAllOrUpcomingEvents"
-import ActionAreaCard from "./components/event-card/EventCard"
 import ViewCurrentEvents from "./pages/ViewCurrentEvents"
+import Autosubmit from "./pages/autosubmit"
 
 
 function App() {
@@ -31,6 +31,7 @@ function App() {
         <Route path="/eventname" element={<EventPage/>} />
         <Route path="/all-events" element={<ViewAllOrUpcomingEvents/>} />
         <Route path="/events" element={<ViewCurrentEvents/>} />
+        <Route path="/submit/:formId" element={<Autosubmit/>} />
       </Routes>
     </BrowserRouter>
   )
