@@ -11,7 +11,6 @@ import {
 } from './auth';
 import { SERVER_PORT } from '../../config.json';
 import { getDb } from './config/db';
-import { testDb } from './config/testdb';
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Society, updateSociety, createSociety } from './config/society';
