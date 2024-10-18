@@ -25,7 +25,7 @@ export default function Landing() {
           >
             PRESENT
           </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 7, justifyContent: 'center', pt: '15%' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10%', justifyContent: 'center', pt: '15%' }}>
           <Button
             // type="submit"
             onClick={() => navigate("/login/attendee")}
