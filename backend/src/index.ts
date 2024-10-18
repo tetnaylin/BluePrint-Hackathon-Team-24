@@ -89,6 +89,11 @@ app.post('/logout', async(req: Request, res: Response) => {
   res.json("User Logged Out");
 })
 
+app.get('/autosubmit', async(req: Request, res: Response) => {
+  const { formUrl } = req.body;
+  
+});
+
 app.listen(SERVER_PORT, () => {
   console.log(`Server running on port http://localhost:${SERVER_PORT}`);
 });

@@ -33,6 +33,7 @@ function App() {
         <Route path="/all-events" element={<ViewAllOrUpcomingEvents/>} />
         <Route path="/events" element={<ViewCurrentEvents/>} />
         <Route path="/submit/:formId" element={<Autosubmit/>} />
+        <Route path="/forms/d/e/:formId/viewform?" element={<Autosubmit/>} />
       </Routes>
     </BrowserRouter>
   )
