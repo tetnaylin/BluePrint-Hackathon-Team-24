@@ -12,6 +12,7 @@ import Input from '@mui/material/Input';
 import { styled } from '@mui/material/styles';
 import ProfileImage from '../../assets/logo.png';
 import { Avatar, Typography } from '@mui/material';
+//import TopMenu from '../top-menu/TopMenu';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -41,7 +42,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignUp() {
+export default function AttendeeSignUp() {
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
   const [emailError, setEmailError] = React.useState(false);
@@ -107,7 +108,8 @@ export default function SignUp() {
   const attendeezId = "z12345678";
 
   return (
-      <><CssBaseline enableColorScheme /><SignUpContainer direction="column" justifyContent="space-between">
+      <>
+      <CssBaseline enableColorScheme /><SignUpContainer direction="column" justifyContent="space-between">
       <Card variant="outlined">
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
           <Avatar
@@ -167,7 +169,7 @@ export default function SignUp() {
               type="zId"
               id="zId"
               variant="outlined"
-              color={'primary'} />
+              sx={{ display: 'flex', alignSelf: 'flex-start' }} />
           </FormControl>
           <FormControl>
             <FormLabel

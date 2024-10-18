@@ -15,7 +15,7 @@ model Attendee {
   email String @unique
   name String
   societies Society[]
-  discord String? @unique
+  discord String?
   arcMember Boolean
   year Int
   responses AttendanceResponse[]
