@@ -18,7 +18,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/zIdLogin', async(req: Request, res: Response) => {
-  const zId = req.body.zID;
+  const zId = req.body.zId;
   const password = req.body.password;
   
   if (!zId || !authenticateStudent(zId, password)) {

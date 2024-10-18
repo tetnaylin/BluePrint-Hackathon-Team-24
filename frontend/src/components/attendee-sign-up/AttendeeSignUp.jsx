@@ -12,6 +12,7 @@ import ProfileImage from '../../assets/logo.png';
 import { Avatar, IconButton, InputAdornment, Typography } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -46,6 +47,7 @@ export default function AttendeeSignUp() {
     const [zIdErrorMessage, setzIdErrorMessage] = React.useState('');
     const [passwordError, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+    const navigate = useNavigate();
 
   const validateInputs = () => {
     const zId = document.getElementById('zId');
@@ -55,7 +57,7 @@ export default function AttendeeSignUp() {
 
     if (!password.value || password.value.length < 6) {
       setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
+      setPasswordErrorMessage('Incorrect password.');
       isValid = false;
     } else {
       setPasswordError(false);
@@ -64,7 +66,7 @@ export default function AttendeeSignUp() {
 
     if (!zId.value || !/^z\d{7}$/.test(zId.value)) {
       setzIdError(true);
-      setzIdErrorMessage('Password must start with "z" followed by 7 digits.');
+      setzIdErrorMessage('Incorrect zID.');
       isValid = false;
     } else {
       setzIdError(false);
@@ -74,16 +76,22 @@ export default function AttendeeSignUp() {
     return isValid;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if ( zIdError || passwordError ) {
-      event.preventDefault();
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
-      zId: data.get('zId'),
-      password: data.get('password'),
-    });
+    // const {accessToken, refreshToken, newUser} = await fetch('http://localhost:5180/zIdLogin', {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //     },
+    //});
+    //if(newUser) {
+      navigate('/signup/attendee', { state: { zId: data.get("zId")} });
+    //}
   };
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -158,7 +166,7 @@ export default function AttendeeSignUp() {
               required
               fullWidth
               name="password"
-              placeholder="Password must be at least 6 characters"
+              placeholder="**********"
               type={showPassword ? 'text' : 'password'}
               endAdornment={
                 <InputAdornment position="end">
@@ -180,7 +188,7 @@ export default function AttendeeSignUp() {
               sx={{"&:before": { borderColor: "primary.main" }}} />
           </FormControl>
           <Box pb='15%'/>
-          <Box sx={{ justifyContent: 'center' }}>
+          <Box sx={{ display: 'flex', flexDirection: "column", justifyContent: 'center' }}>
             <Button
               type="submit"
               variant="contained"
