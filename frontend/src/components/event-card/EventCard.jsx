@@ -7,7 +7,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import SampleEvent from '../../assets/bbq-devsoc-event.png';
 import { Box, Button } from "@mui/material";
 
-export default function ActionAreaCard() {
+export default function ActionAreaCard( { isSociety } ) {
   return (
     <Card sx={{ maxWidth: 345, border: 5, borderColor: "gray", marginTop: "5%"}}>
       <CardActionArea>
@@ -27,7 +27,7 @@ export default function ActionAreaCard() {
           <Typography variant="body2" sx={{ color: 'text.secondary', fontStyle: "italic", fontSize: "12px" }}>
             AYO DID ANYONE SAY SECONDS, we will be having a second BBQ this week Friday 12 - 2pm (4th October) at Library Lawn, so show up pls again
           </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10%', justifyContent: 'center', pt: '5%' }}>
+          { isSociety ? <Box sx={{ display: 'flex', flexDirection: 'row', gap: '10%', justifyContent: 'center', pt: '5%' }}>
           <Button
             // type="submit"
             variant="contained"
@@ -58,7 +58,7 @@ export default function ActionAreaCard() {
           >
             Regenerate QR Code
           </Button>
-        </Box>
+        </Box> : <></>}
         </CardContent>
       </CardActionArea>
     </Card>
