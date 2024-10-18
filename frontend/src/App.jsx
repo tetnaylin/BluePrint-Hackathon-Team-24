@@ -20,7 +20,6 @@ function App() {
         {/* <Route path="/new-society-sign-up" element={< />} /> */}
         {/* <Route path="/" element={<Landing />} /> */}
         {/* to change to "/sign-up" afterwards */}
-        <Route path="/" element={<SignUp />} />
         <Route path="/scanned" element={<QrCodeScanned />} />
         <Route path="/newevent" element={<ManageEvent/>} />
       </Routes>
