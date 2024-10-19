@@ -31,6 +31,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript with Express :)))!');
 });
 
+
 app.post('/zIdLogin', async(req: Request, res: Response) => {
   console.log(req.body.zId);
   const zId = req.body.zId;

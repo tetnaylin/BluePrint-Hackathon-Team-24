@@ -42,7 +42,7 @@ export default async function checkLoggedIn() {
     console.log(accessToken);
 
     if(!checkTokenExpiration(accessToken) && refreshToken) {
-        const response = await fetch('http://localhost:5180/getNewToken', {
+        const response = await fetch('https://a627-193-119-101-191.ngrok-free.app/getNewToken', {
             method: 'POST',
             headers: {
             Accept: 'application/json',

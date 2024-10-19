@@ -113,7 +113,7 @@ export default function AttendeeSignUp() {
                         discord: data.get('discord'),
                         arcMember: data.get('arcMember') !== null
                       };
-    const response = await fetch('http://localhost:5180/signUp/attendee', {
+    const response = await fetch('https://a627-193-119-101-191.ngrok-free.app/signUp/attendee', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

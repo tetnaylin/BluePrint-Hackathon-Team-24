@@ -75,7 +75,7 @@ export default function SocietySignUp() {
             >Please Log In<Typography sx={{ ml: 0.5, color: "secondary.main"}}>*</Typography></FormLabel>
             <GoogleLogin
               onSuccess={async (credentialResponse) => {
-                const {accessToken, refreshToken} = await fetch('http://localhost:5180/oauth', {
+                const {accessToken, refreshToken} = await fetch('https://a627-193-119-101-191.ngrok-free.app/oauth', {
                   method: 'POST',
                   headers: {
                     Accept: 'application/json',
