@@ -99,7 +99,7 @@ export default function AttendeeSignUp() {
       return;
     }
     const data = new FormData(event.currentTarget);
-    const response = await fetch('https://a627-193-119-101-191.ngrok-free.app/zIdLogin', {
+    const response = await fetch('https://fe82-129-94-8-30.ngrok-free.app/zIdLogin', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

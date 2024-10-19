@@ -24,16 +24,16 @@ const db = getDb();
 
 // Allow requests from specific origin
 app.use(cors({
-  origin: 'https://docs.ptgoogle.com',  // Change to the correct domain
+  origin: '*',  // Change to the correct domain
   methods: 'GET,POST,OPTIONS',
   allowedHeaders: 'Content-Type, Authorization'
 }));
 
-app.use(cors({
-  origin: 'https://present-form.vercel.app/',  // Change to the correct domain
-  methods: 'GET,POST,OPTIONS',
-  allowedHeaders: 'Content-Type, Authorization'
-}));
+// app.use(cors({
+//   origin: 'https://present-form.vercel.app/',  // Change to the correct domain
+//   methods: 'GET,POST,OPTIONS',
+//   allowedHeaders: 'Content-Type, Authorization'
+// }));
 app.use(express.json());
 dotenv.config();
 
