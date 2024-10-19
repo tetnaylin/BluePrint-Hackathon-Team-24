@@ -28,6 +28,12 @@ app.use(cors({
   methods: 'GET,POST,OPTIONS',
   allowedHeaders: 'Content-Type, Authorization'
 }));
+
+app.use(cors({
+  origin: 'https://present-form.vercel.app/',  // Change to the correct domain
+  methods: 'GET,POST,OPTIONS',
+  allowedHeaders: 'Content-Type, Authorization'
+}));
 app.use(express.json());
 dotenv.config();
 
