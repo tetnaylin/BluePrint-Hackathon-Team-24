@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import checkLoggedIn from "../util/verifyUser";
+import { Container, Typography } from "@mui/material";
+import TopMenu from "../components/top-menu/TopMenu";
 
 export default function AutoSubmit() {
     const { formId } = useParams();
