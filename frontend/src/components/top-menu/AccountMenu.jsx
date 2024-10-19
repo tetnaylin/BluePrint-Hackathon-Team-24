@@ -26,7 +26,7 @@ export default function AccountMenu() {
 
     const handleLogOut = async () => {
       const refreshToken = localStorage.getItem(`present-refresh`);
-      await fetch('https://a627-193-119-101-191.ngrok-free.app/logout', {
+      await fetch('https://fe82-129-94-8-30.ngrok-free.app/logout', {
         method: 'POST',
         headers: {
         Accept: 'application/json',

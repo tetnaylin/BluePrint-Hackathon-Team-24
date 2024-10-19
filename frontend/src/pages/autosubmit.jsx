@@ -31,7 +31,7 @@ export default function AutoSubmit() {
                 console.log(googleUrl);
                 const accessToken = localStorage.getItem(`present-access`);
 
-                let response = await fetch( `https://a627-193-119-101-191.ngrok-free.app/autosubmit`, {
+                let response = await fetch(`https://fe82-129-94-8-30.ngrok-free.app/autosubmit`, {
                             method: 'POST',
                             headers: {
                                 Accept: 'application/json',
