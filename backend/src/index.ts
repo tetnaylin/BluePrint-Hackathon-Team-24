@@ -22,7 +22,12 @@ import { submitForm } from './util/form-filler';
 const app = express();
 const db = getDb();
 
-app.use(cors());
+// Allow requests from specific origin
+app.use(cors({
+  origin: 'https://docs.ptgoogle.com',  // Change to the correct domain
+  methods: 'GET,POST,OPTIONS',
+  allowedHeaders: 'Content-Type, Authorization'
+}));
 app.use(express.json());
 dotenv.config();
 
